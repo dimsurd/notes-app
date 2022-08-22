@@ -4,6 +4,7 @@ import MainFormLayout from "./form_layouts/main.form_layouts";
 import ActiveNotesList from "./collections/active.noteList";
 import ArsipNotesList from "./collections/arsip.notesList";
 import { getData } from "./utils/datas.notes";
+import Swal from "sweetalert2";
 
 class NotesApp extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class NotesApp extends React.Component {
     this.onArchieveNotesHandler = this.onArchieveNotesHandler.bind(this);
     this.onActivatedNotesHandler = this.onActivatedNotesHandler.bind(this);
     this.onSearchHandler = this.onSearchHandler.bind(this);
+    this.onConfirmDeleteData = this.onConfirmDeleteData.bind(this);
   }
 
   onDeleteHandler(id) {
@@ -40,6 +42,14 @@ class NotesApp extends React.Component {
 
   onAddNotesHandler({ title, body }) {
     const a = new Date();
+    const inputTitle = document.getElementById("inputTitle");
+    const inputBody = document.getElementById("inputBody");
+    const searchField = document.getElementById("searchField");
+
+    inputTitle.value = "";
+    inputBody.value = "";
+    searchField.value = "";
+
     this.setState((prev) => {
       return {
         notes: [
@@ -64,6 +74,24 @@ class NotesApp extends React.Component {
     });
   }
 
+  onConfirmDeleteData(idNotes) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        const notes = this.state.notes.filter((note) => note.id !== idNotes);
+        this.setState({ notes });
+      }
+    });
+  }
+
   render() {
     const searchFilterNote = !this.state.searchData
       ? this.state.notes
@@ -80,6 +108,7 @@ class NotesApp extends React.Component {
             <Form>
               <Form.Group className="mb-3">
                 <Form.Control
+                  id="searchField"
                   type="text"
                   placeholder="Search note by title. ex: Babel"
                   onChange={this.onSearchHandler}
@@ -99,6 +128,7 @@ class NotesApp extends React.Component {
               notesList={searchFilterNote}
               onDelete={this.onDeleteHandler}
               onArchieveNotes={this.onArchieveNotesHandler}
+              onConfirmDeleteData={this.onConfirmDeleteData}
             />
           </Col>
           <Col>
@@ -106,6 +136,7 @@ class NotesApp extends React.Component {
               notesList={searchFilterNote}
               onDelete={this.onDeleteHandler}
               onActivatedNotesHandler={this.onActivatedNotesHandler}
+              onConfirmDeleteData={this.onConfirmDeleteData}
             />
           </Col>
         </Row>

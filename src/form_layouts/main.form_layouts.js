@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Button, Row, Col, Container, Alert } from "react-bootstrap";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 class MainFormLayout extends React.Component {
   constructor(props) {
@@ -37,7 +38,13 @@ class MainFormLayout extends React.Component {
 
   onSubmitEventHandler(event) {
     event.preventDefault();
+    Swal.fire("Fuooyooooh!", "Data Saved!", "success");
     this.props.addNotes(this.state);
+    this.setState((prev) => {
+      return {
+        maxCharTitle: 55,
+      };
+    });
   }
 
   render() {
@@ -67,6 +74,8 @@ class MainFormLayout extends React.Component {
                     </Col>
                   </Row>
                   <Form.Control
+                    id="inputTitle"
+                    required
                     type="text"
                     placeholder="Enter Title"
                     onChange={this.onTitleChangeHandler}
@@ -79,6 +88,8 @@ class MainFormLayout extends React.Component {
                 <Form.Group className="mb-3">
                   <Form.Label>Body Note</Form.Label>
                   <Form.Control
+                    id="inputBody"
+                    required
                     onChange={this.onBodyChangeHandler}
                     as="textarea"
                     placeholder="Write your Note Here..."

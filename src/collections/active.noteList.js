@@ -2,7 +2,12 @@ import React from "react";
 import { Button, Card, Row, Col } from "react-bootstrap";
 import moment from "moment";
 
-const ActiveNotesList = ({ notesList, onDelete, onArchieveNotes }) => {
+const ActiveNotesList = ({
+  notesList,
+  onDelete,
+  onArchieveNotes,
+  onConfirmDeleteData,
+}) => {
   return (
     <React.Fragment>
       <h3 className="mb-3">Active Note List</h3>
@@ -18,9 +23,9 @@ const ActiveNotesList = ({ notesList, onDelete, onArchieveNotes }) => {
                       <Card.Body>
                         <Card.Title>{notes.title}</Card.Title>
                         <p>
-                          {moment(notes.createdAt)
-                            .utc()
-                            .format("dddd, MMMM Do YY - h:mm:ss a")}
+                          {moment(notes.createdAt).format(
+                            "dddd, MMMM Do YY - h:mm:ss a"
+                          )}
                         </p>
                         <Card.Text>{notes.body}</Card.Text>
                         <Button
@@ -32,7 +37,7 @@ const ActiveNotesList = ({ notesList, onDelete, onArchieveNotes }) => {
                         </Button>
                         <Button
                           variant="outline-danger"
-                          onClick={() => onDelete(notes.id)}
+                          onClick={() => onConfirmDeleteData(notes.id)}
                         >
                           Delete
                         </Button>
